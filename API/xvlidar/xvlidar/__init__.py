@@ -136,7 +136,11 @@ class XVLidar(object):
         x2= data[2]
         x3= data[3]
         
-        dist_mm = x | (( x1 & 0x3f) << 8) # distance is coded on 13 bits ? 14 bits ?
+        n = x | (( x1 & 0x3f) << 8) # distance is coded on 13 bits ? 14 bits ?
+
+        # Polynomial Regression Line
+        dist_mm = 2.331e-18*math.pow(n,6) - 1.941e-14*math.pow(n,5) + 5.93e-11*math.pow(n,4) - 8.043e-8*math.pow(n,3) + 4.186e-5*math.pow(n,2)+0.9578*n-47.82
+ 
         quality = x2 | (x3 << 8) # quality is on 16 bits
         self.lidar_data[angle] = dist_mm,quality
 
